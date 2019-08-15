@@ -1,0 +1,154 @@
+﻿@model IEnumerable<demandModul.Models.Database.SuggestionType>
+
+@{
+    ViewBag.Title = "SuggestionTypes";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Suggestion Types</h2>
+
+<div class="row">
+    <div class="col-md-10">
+        <br />
+        <!--<input class="form-control"  style="width: 50%" id="myInput" type="text" placeholder="Search...">-->
+    </div>
+    <div class="col-md-2">
+        <br />
+        <button type="button" class="btn btn-info btn-block" data-toggle="modal" data-target="#CreateNew">
+            Create New
+        </button>
+        <div class="modal fade" id="CreateNew" tabindex="-1" role="dialog" aria-labelledby="CenterTitle" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="CreateNewTitle">Create New</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div id="loading" class="spinner-border text-info" role="status" style="display:none">
+                            <span class="sr-only">Creating...</span>
+                        </div>
+                        <div class="form-group">
+                            <label for="txtname">Name</label>
+                            <input type="text" class="form-control" id="txtname" placeholder="Name">
+                        </div>
+                        <div class="form-group">
+                            <label for="txtexplanation">Explanation</label>
+                            <input type="text" class="form-control" id="txtexplanation" placeholder="Explanation">
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="button" id="create" class="btn btn-primary">Create</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <br />
+    </div>
+</div>
+<table class="table table-striped">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.Name)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Explanation)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.CreateDate)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.CreateEmployee.NameSurname)
+        </th>
+        <th></th>
+        <th></th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        if (item.Status != "Passive")
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Explanation)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.CreateDate)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.CreateEmployee.NameSurname)
+                </td>
+                <td>
+                    <a href="#" class="btn btn-info btn-block" onclick="EditRecord(@item.SuggestionTypeID)">Edit </a>
+                </td>
+                <td>
+                    @Ajax.ActionLink("Delete", "Delete", new { id = item.SuggestionTypeID }, new AjaxOptions() { HttpMethod = "GET", OnSuccess= "fnSuccess" }, new { @class = "btn btn-danger btn-block" })
+
+                </td>
+            </tr>
+        }
+    }
+
+</table>
+
+<div class="modal fade" id="myModal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Edit</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" id="myModalBodyDiv">
+
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<script>
+    function fnSuccess() {  
+        window.location.reload();
+    } 
+    $(function () {
+        $('#create').click(function () {
+            if (($('#txtexplanation').val() != 0) && ($('#txtname').val() != 0)) {
+                var explanation = $('#txtexplanation').val();
+                var name = $('#txtname').val();
+                $.ajax({
+                    method: "POST",
+                    url: "/SuggestionType/CreateNew",
+                    data: { name: name, explanation: explanation },
+                    beforeSend: function () {
+                        $('#loading').show(300);
+                    }
+                }).done(function () {
+                    window.location.reload();
+                }).always(function () {
+                    $('#loading').hide(300);
+                    $('#CreateNew').modal('hide')
+                });
+                $('#txtexplanation').val(null);
+                $('#txtname').val(null);
+            }
+            else {
+                $('#txtexplanation').css("border", "1px solid red");
+                $('#txtname').css("border", "1px solid red");
+            }
+        });
+    });
+    var EditRecord = function (SuggestionTypeID) {
+        var url = "/SuggestionType/EditRecord?id=" + SuggestionTypeID;
+        $('#myModalBodyDiv').load(url, function () {
+            $('#myModal').modal("show");
+        });
+    }
+</script>

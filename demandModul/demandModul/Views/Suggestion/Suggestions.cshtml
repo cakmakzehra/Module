@@ -1,0 +1,123 @@
+﻿@model IEnumerable<demandModul.Models.Suggestion>
+
+@{
+    ViewBag.Title = "Suggestions";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Suggestions</h2>
+<br />
+<div class="row">
+    <div class="col-md-10">
+        <br />
+        <!--<input class="form-control"  style="width: 50%" id="myInput" type="text" placeholder="Search...">-->
+    </div>
+    <div class="col-md-2">
+        <br />
+        <button type="button" class="btn btn-info btn-block" data-toggle="modal" data-target="#CreateNew">
+            Create New
+        </button>
+        <div class="modal fade" id="CreateNew" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="CreateNewTitle">Create New</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div id="loading" class="spinner-border text-info" role="status" style="display:none">
+                            <span class="sr-only">Creating...</span>
+                        </div>
+                        <div class="form-group">
+                            <label for="txtname">Name</label>
+                            <input type="text" class="form-control" id="txtname" placeholder="Name">
+                        </div>
+                        <div class="form-group">
+                            <label for="txtexplanation">Explanation</label>
+                            <input type="text" class="form-control" id="txtexplanation" placeholder="Explanation" required>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="button" id="create" class="btn btn-primary">Create</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <br />
+    </div>
+</div>
+<div class="row">
+    @foreach (var item in Model.OrderByDescending(i=>i.LikesCount))
+    {
+        if (item.ApprovedStatus == "New Suggestion")
+        {
+            if (Session["Title"].ToString() == "Manager" || (Convert.ToInt32(Session["EmployeeID"]) == item?.Employee.EmployeeID))
+            {
+                <div class="col-sm-4">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title" style="color:red">( Not approved yet) </h5>
+                            <h5 class="Card-title">@item.Name</h5>
+                            <p class="card-text">@item.Explanation</p>
+                            <br />
+                            @Html.ActionLink("Go Detail", "Detail", new { SuggestionID = @item.SuggestionID }, new { @class = "btn btn-info" })
+                        </div>
+
+                    </div>
+                    <br />
+                </div>
+                <br />
+            }
+        }
+        if (item?.ApprovedStatus == "Approved")
+        {
+            <div class="col-sm-4">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="Card-title">@item.Name</h5>
+                        <p class="card-text">@item.Explanation</p>
+                        <br />
+                        @Html.ActionLink("Go Detail", "Detail", new { SuggestionID = @item.SuggestionID }, new { @class = "btn btn-info" })
+                    </div>
+
+                </div>
+                <br />
+            </div>
+            <br />
+        }
+    }
+</div>
+
+
+<script>
+    $(function () {
+        $('#create').click(function () {
+            if ($('#txtexplanation').val() != 0) {
+                var name = $('#txtname').val();
+                var explanation = $('#txtexplanation').val();
+                $.ajax({
+                    method: "POST",
+                    url: "/Suggestion/CreateNew",
+                    data: { name: name, explanation: explanation },
+                    beforeSend: function () {
+                        $('#loading').show(300);
+                    }
+                }).done(function () {
+                    window.location.reload();
+                }).always(function () {
+                    $('#loading').hide(300);
+                    $('#CreateNew').modal('hide');
+                    
+                });
+                $('#txtname').val(null);
+                $('#txtexplanation').val(null);
+            } else {
+                $('#txtexplanation').css("border", "1px solid red");
+            }
+        });
+    });
+</script>

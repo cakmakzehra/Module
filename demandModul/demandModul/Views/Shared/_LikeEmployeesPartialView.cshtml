@@ -1,0 +1,13 @@
+﻿@model demandModul.ViewModels.SuggestionViewModel.SuggestionLike
+
+@if (Model.Suggestion.LikesCount != 0)
+{
+    if (Model.Suggestion.LikesCount != 1)
+    {
+        <p>@Model.Like[0].Employee.NameSurname and @(Model.Like.Count - 1) employee liked this suggestion.</p>
+    }
+    else
+    {
+        <p>@Model.Like[0].Employee.NameSurname liked this suggestion.</p>
+    }
+}

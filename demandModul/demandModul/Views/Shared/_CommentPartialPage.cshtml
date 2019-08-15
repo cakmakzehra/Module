@@ -1,0 +1,7 @@
+﻿@using demandModul.Models
+@model IEnumerable<Comment>
+
+@foreach (var item in Model)
+{
+    <p class="rounded" style="border:1.3px; border-style:solid; border-color:#449595; padding: 1em;"><b>@item.Employee.NameSurname</b> : @item.CommentText</p>
+}

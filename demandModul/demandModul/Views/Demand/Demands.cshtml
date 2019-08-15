@@ -1,0 +1,193 @@
+﻿@using demandModul.Models
+@model IEnumerable<Demand>
+
+@{
+    ViewBag.Title = "Demands";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Demands</h2>
+
+<div class="row">
+    <div class="col-md-10">
+        <br />
+        <!--<input class="form-control"  style="width: 50%" id="myInput" type="text" placeholder="Search...">-->
+    </div>
+    <div class="col-md-2">
+        <br />
+
+        <button type="button" class="btn btn-info btn-block" data-toggle="modal" data-target="#CreateNew">
+            Create New
+        </button>
+        <div class="modal fade" id="CreateNew" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="CreateNewTitle">Create New</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div id="loading" class="spinner-border text-info" role="status" style="display:none">
+                            <span class="sr-only">Creating...</span>
+                        </div>
+                        <div class="form-group">
+                            <label for="txtname">Inventory Name</label>
+                            <input type="text" class="form-control" id="txtname" placeholder="Inventory Name" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="Piece">Quantity</label>
+                            <input type="number" class="form-control" id="Piece" placeholder="Quantity" min=1 required>
+                        </div>
+                        <div class="form-group">
+                            <label for="UnitType">Unit Type</label>
+                            <select class="form-control" id="UnitType">
+                                @foreach (var item in ViewBag.UnitTypeList)
+                                {
+                                    <option value="@item.Value">@item.Text </option>
+                                }
+                                </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="Urgency">Urgency</label>
+                            <select class="form-control" id="Urgency" required>
+                                <option>Planned</option>
+                                <option>Low</option>
+                                <option>Normal</option>
+                                <option>Significant</option>
+                                <option>Very Urgent</option>
+                                <option>Others</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="Address">Location</label>
+                            <select class="form-control" id="Address">
+                                @foreach (var item in ViewBag.LocationList)
+                                {
+                                <option value="@item.Value"> @item.Text</option>
+                                }
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="txtexplanation">Explanation</label>
+                            <input type="text" class="form-control" id="txtexplanation" placeholder="Explanation" required>
+
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="button" id="create" class="btn btn-primary">Create</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <br />
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-12">
+        <table class="table table-striped">
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.InventoryName)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Quantity)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.UnitType)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.CreateDate)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Urgency)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Explanation)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.ApprovedStatus)
+                </th>
+                <th></th>
+
+            </tr>
+
+            @foreach (var item in Model)
+            {
+                if (item.ApprovedStatus != "Passive")
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.InventoryName)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Quantity)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.UnitType.Name)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.CreateDate)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Urgency)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Explanation)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.ApprovedStatus)
+                        </td>
+                        <td>
+                            @Html.ActionLink("Detail", "Detail", new { DemandID = @item.DemandID }, new { @class = "btn btn-info" })
+                        </td>
+                    </tr>
+                }
+            }
+
+        </table>
+    </div>
+</div>
+
+<script>
+    $(function () {
+        $('#create').click(function () {
+            console.log("iceride");
+            if (($('#txtexplanation').val() != 0) && ( $('#txtname').val() != 0) && ($('#Piece').val() != 0) && ($('#Urgency').val() != 0)) {
+                var explanation = $('#txtexplanation').val();
+                var unitType = $('#UnitType').val();
+                var name = $('#txtname').val();
+                var piece = $('#Piece').val();
+                var urgency = $('#Urgency').val();
+                var address = $('#Address').val();
+                $.ajax({
+                    method: "POST",
+                    url: "/Demand/CreateNew",
+                    data: { name: name, piece: piece, urgency: urgency, address: address, explanation: explanation, unitType: unitType },
+                    beforeSend: function () {
+                        $('#loading').show(300);
+                    }
+                }).done(function () {
+                    window.location.reload();
+                }).always(function () {
+                    $('#loading').hide(300);
+                    $('#CreateNew').modal('hide')
+                });
+                $('#UnitType').val(null);
+                $('#txtexplanation').val(null);
+                $('#txtname').val(null);
+                $('#Piece').val(null);
+                $('#Urgency').val(null);
+                $('#Address').val(null);
+            }
+            else {
+                $('#txtexplanation').css("border", "1px solid red");
+                $('#txtname').css("border", "1px solid red");
+                $('#Piece').css("border", "1px solid red");
+                $('#Urgency').css("border", "1px solid red");
+            }
+        });
+    });
+</script>

@@ -1,0 +1,85 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Demand Modul</title>
+    <link href="~/Content/Site.css" rel="stylesheet" type="text/css" />
+    <script src="~/Scripts/jquery-3.4.1.min.js"></script>
+    <link href="~/Content/bootstrap.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.0/css/all.css" integrity="sha384-lZN37f5QGtY3VHgisS14W3ExzMWZxybE1SJSEsQp9S+oqd12jhcu+A56Ebc1zFSJ" crossorigin="anonymous">
+
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <a class="navbar-brand" href="~/Home/Index"><i class="fab fa-superpowers"></i> Module </a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item active">
+                    <a class="nav-link" href="~/Home/Index">Home <span class="sr-only">(current)</span></a>
+                </li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Categories
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                        <a class="dropdown-item" href="~/UnitType/UnitTypes">Unit Type</a>
+                        <a class="dropdown-item" href="~/Location/Locations">Location</a>
+                        <a class="dropdown-item" href="~/FaultType/FaultTypes">Fault Type</a>
+                        <a class="dropdown-item" href="~/SuggestionType/SuggestionTypes">Suggestion Type</a>
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item" href="#">Something else here</a>
+                    </div>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="~/Demand/Demands">Demands </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="~/Fault/Faults">Faults </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="~/Suggestion/Suggestions">Suggestions </a>
+                </li>
+            </ul>
+            <ul class="navbar-nav my-2 my-lg-0">
+                @if (@Session["EmployeeID"] != null)
+                {
+                    <li class="nav-item dropdown ">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <i class="fas fa-user"></i> @Session["Name"].ToString()
+                        </a>
+                        <div class="dropdown-menu dropdown-menu-right" style="text-align:right" aria-labelledby="navbarDropdown">
+                            <a class="dropdown-item" href="~/Employee/MyProfile">Profile</a>
+                            @if (@Session["Title"].ToString() == "Manager")
+                            {
+                                <a class="dropdown-item" href="~/Employee/List">Employee List</a>
+                            }
+                            <div class="dropdown-divider"></div>
+                            <a class="dropdown-item" href="~/Employee/Logout">Log out</a>
+                        </div>
+                    </li>
+                }
+                else
+                {
+                    <li class="nav-item">
+                        <a class="nav-link" href="~/Employee/Login"><i class="fas fa-sign-in-alt"></i> Login</a>
+                    </li>
+                }
+            </ul>
+        </div>
+    </nav>
+    <div class="container">
+        <br />
+        @RenderBody()
+    </div>
+    <script src="~/Scripts/jquery-3.4.1.min.js"></script>
+    <script src="~/Scripts/jquery.unobtrusive-ajax.min.js"></script>
+    <script src="~/Scripts/bootstrap.min.js"></script>
+    <script src="~/Scripts/bootstrap.bundle.min.js"></script>
+    <script src="~/Scripts/umd/popper.min.js"></script>
+</body>
+</html>

@@ -1,0 +1,90 @@
+﻿@using demandModul.ViewModels.IndexViewModel
+@model IndexViewModel
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<div class="row">
+    <div class="col-md-12">
+        <br />
+        <br />
+        <h4>Announcements</h4>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-6">
+        <br />
+        <div class="list-group">
+            <a href="/Demand/Demands" class="list-group-item list-group-item-action active">
+                Demands
+            </a>
+            @foreach (var item in Model?.Demand)
+            {
+                if (item.ApprovedStatus == "New Demand")
+                {
+                    <a href="/Demand/Detail?DemandID=@item.DemandID" class="list-group-item list-group-item-action">@item.Employee.NameSurname created a new demand "@item.InventoryName".</a>
+                }
+                if (item.ApprovedStatus == "Approved")
+                {
+                    <a href="/Demand/Detail?DemandID=@item.DemandID" class="list-group-item list-group-item-success">@item.ApproverEmployee approved demand "@item.InventoryName".</a>
+                }
+
+            }
+
+        </div>
+        
+    </div>
+    <div class="col-md-6">
+        <br />
+        <div class="list-group">
+            <a href="/Fault/Faults" class="list-group-item list-group-item-action active">
+                Faults
+            </a>
+            @foreach (var item in Model?.Fault)
+            {
+                if (item.FaultStatus == "New Fault")
+                {
+                    if ((item.RelatedDepartment == Session["Department"]?.ToString()) && (Session["Title"]?.ToString() == "Manager"))
+                    {
+                        <a href="/Fault/Detail?FaultID=@item.FaultID" class="list-group-item list-group-item-danger">@item.Employee.NameSurname created a new fault.</a>
+                    }
+                    else
+                    {
+                        <a href="/Fault/Detail?FaultID=@item.FaultID" class="list-group-item list-group-item-action">@item.Employee.NameSurname created a new fault.</a>
+                    }
+                }
+                if (item.FaultStatus == "Successfully completed")
+                {
+                    <a href="/Fault/Detail?FaultID=@item.FaultID" class="list-group-item list-group-item-success">@item.MaintenanceEmployee completed a fault.</a>
+                }
+
+            }
+
+        </div>
+        <br />
+        <br />
+        <div class="list-group">
+            <a href="/Suggestion/Suggestions" class="list-group-item list-group-item-action active">
+                Suggestions
+            </a>
+            @foreach (var item in Model?.Suggestion)
+            {
+
+                if (item.ApprovedStatus == "Approved")
+                {
+                    <a href="/Suggestion/Detail?SuggestionID=@item.SuggestionID" class="list-group-item list-group-item-success">@item.Employee.EmployeeID created a suggestion "@item.Name".</a>
+                }
+                if (item.LikesCount == 50)
+                {
+                    <a href="/Suggestion/Detail?SuggestionID=@item.SuggestionID" class="list-group-item list-group-item-warning">@item.Employee.EmployeeID's suggestion was liked by 50 people "@item.Name".</a>
+                }
+            }
+
+        </div>
+
+
+    </div>
+</div>
+

@@ -1,0 +1,40 @@
+﻿@model demandModul.Models.Database.FaultType
+
+    <div>
+        <form id="myForm">
+            @Html.HiddenFor(x => x.FaultTypeID)
+            @Html.TextBoxFor(x => x.Name, new { @class = "form-control", @placeholder = "Name" })
+            <br />
+            @Html.TextBoxFor(x => x.Explanation, new { @class = "form-control", @placeholder = "Explanation" })
+            <br />
+            <a href="" id="btnSubmit" class="btn btn-success">Save</a>
+
+        </form>
+
+        <div id="loading" class="spinner-border text-info" role="status" style="display:none">
+            <span class="sr-only">Saving...</span>
+        </div>
+
+    </div>
+
+<script>
+
+    $(document).ready(function () {
+        $('#btnSubmit').click(function () {
+            $('#loading').show();
+            var myFormData = $('#myForm').serialize();
+            $.ajax({
+                type: "POST",
+                url: "/FaultType/FaultTypes",
+                data: myFormData,
+                success: function () {
+                    $('#loading').hide();
+                    $('#myModal').modal("hide");
+                    window.location.reload();
+                    //window.location.href = "FaultType/FaultTypes";
+                }
+
+            })
+        })
+    })
+</script>

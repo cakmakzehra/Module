@@ -1,0 +1,223 @@
+﻿@model demandModul.Models.Demand
+
+@{
+    ViewBag.Title = "Detail";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="row">
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-header">
+                <b>DemandID:</b> @Html.DisplayFor(model => model.DemandID)
+            </div>
+            <ul class="list-group list-group-flush">
+                <li class="list-group-item"><b>Inventory Name:</b> @Html.DisplayFor(model => model.InventoryName)</li>
+                <li class="list-group-item"><b>Quantity:</b> @Html.DisplayFor(model => model.Quantity)</li>
+                <li class="list-group-item"><b>Unit Type:</b> @Html.DisplayFor(model => model.UnitType.Name)</li>
+                <li class="list-group-item"><b>Urgency:</b> @Html.DisplayFor(model => model.Urgency)</li>
+                <li class="list-group-item"><b>Address:</b> @Html.DisplayFor(model => model.Location.Name)</li>
+                <li class="list-group-item"><b>Explanation:</b> @Html.DisplayFor(model => model.Explanation)</li>
+                <li class="list-group-item"><b>Create Date:</b> @Html.DisplayFor(model => model.CreateDate)</li>
+                <li class="list-group-item"><b>Created Employee Name and Surname:</b> @Html.DisplayFor(model => model.Employee.NameSurname)</li>
+                <li class="list-group-item"><b>Approved Status:</b> @Model.ApprovedStatus</li>
+                @if (Model?.ApprovedStatus != "New Demand")
+                {
+                    <li class="list-group-item"><b>Approver Employee:</b> @Html.DisplayFor(model => model.ApproverEmployee)</li>
+                    <li class="list-group-item"><b>Approved Date:</b> @Html.DisplayFor(model => model.AppDate)</li>
+                    <li class="list-group-item"><b>Approver's Note:</b> @Html.DisplayFor(model => model.AppNote)</li>
+                }
+            </ul>
+        </div>
+        <br />
+    </div>
+    <div class="col-md-4">
+
+        @if ((Session["Title"]?.ToString() == "Manager") && (Model?.ApprovedStatus == "New Demand"))
+        {
+            <button type="button" class="btn btn-outline-success btn-block" data-toggle="modal" data-target="#AppModal">
+                Approve
+            </button>
+            <div class="modal fade" id="AppModal" tabindex="-1" role="dialog" aria-labelledby="EditModal" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="AppModalLabel">Approve Demand</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            @using (Html.BeginForm())
+                            {
+                                @Html.AntiForgeryToken()
+
+                                <div class="form-horizontal">
+                                    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                                    <div class="form-group">
+                                        @Html.LabelFor(model => model.AppNote, "If you want to say something :", htmlAttributes: new { @class = "control-label" })
+                                        <div class="col-md-10">
+                                            @Html.EditorFor(model => model.AppNote, new { htmlAttributes = new { @class = "form-control" } })
+                                            @Html.ValidationMessageFor(model => model.AppNote, "", new { @class = "text-danger" })
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="submit" name="Approve" value="Approve" class="btn btn-primary">Approve</button>
+                                </div>
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <br />
+            <!--Approve bitiş-->
+            <button type="button" class="btn btn-outline-danger btn-block " data-toggle="modal" data-target="#denModal">
+                Denied
+            </button>
+            <div class="modal fade" id="denModal" tabindex="-1" role="dialog" aria-labelledby="EditModal" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="denModalLabel">Denied Demand</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            @using (Html.BeginForm())
+                            {
+                                @Html.AntiForgeryToken()
+
+                                <div class="form-horizontal">
+                                    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+                                    <div class="form-group">
+                                        @Html.LabelFor(model => model.AppNote, "Why ? ", htmlAttributes: new { @class = "control-label" })
+                                        <div class="col-md-10">
+                                            @Html.EditorFor(model => model.AppNote, new { htmlAttributes = new { @class = "form-control", @required = "required" } })
+                                            @Html.ValidationMessageFor(model => model.AppNote, "", new { @class = "text-danger" })
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="submit" name="Denied" value="Denied" class="btn btn-primary">Denied</button>
+                                </div>
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+        <br />
+
+
+        @if ((Convert.ToInt32(Session["EmployeeID"]) == Model?.Employee.EmployeeID) && (Model?.ApprovedStatus == "New Demand"))
+        {
+
+            <button type="button" class="btn btn-outline-info btn-block " data-toggle="modal" data-target="#myModal">
+                Edit
+            </button>
+            <div class="modal fade" id="myModal">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title">Edit</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        @using (Html.BeginForm())
+                        {
+                            @Html.AntiForgeryToken()
+                            <div class="modal-body" id="myModalBodyDiv">
+
+
+                                <div class="form-horizontal">
+
+                                    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                                    <div class="form-group">
+                                        @Html.LabelFor(model => model.InventoryName, htmlAttributes: new { @class = "control-label" })
+                                        <div class="col-md-10">
+                                            @Html.EditorFor(model => model.InventoryName, new { htmlAttributes = new { @class = "form-control" } })
+                                            @Html.ValidationMessageFor(model => model.InventoryName, "", new { @class = "text-danger" })
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        @Html.LabelFor(model => model.Quantity, htmlAttributes: new { @class = "control-label" })
+                                        <div class="col-md-10">
+                                            @Html.EditorFor(model => model.Quantity, new { htmlAttributes = new { @class = "form-control" } })
+                                            @Html.ValidationMessageFor(model => model.Quantity, "", new { @class = "text-danger" })
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        @Html.LabelFor(model => model.UnitType, "Unit Type", htmlAttributes: new { @class = "control-label" })
+                                        <div class="col-md-10">
+                                            @Html.DropDownList("UnitTypeID", ViewBag.UnitTypeList as SelectList, "Please Select", new { @class = "select form-control" })
+                                            @Html.ValidationMessageFor(model => model.UnitType, "", new { @class = "text-danger" })
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        @Html.LabelFor(model => model.Urgency, htmlAttributes: new { @class = "control-label" })
+                                        <div class="col-md-10">
+                                            @Html.DropDownList("Urgency", new List<SelectListItem>
+                                        {
+                                           new SelectListItem{Text="Planned" ,Value="Planned"},
+                                           new SelectListItem{Text="Low" ,Value="Low"},
+                                           new SelectListItem{Text="Normal" ,Value="Normal"},
+                                           new SelectListItem{Text="Significant" ,Value="Significant"},
+                                           new SelectListItem{Text="Very Urgent" ,Value="Very Urgent"},
+                                        }, new { @class = "select2 form-control" })
+                                            @Html.ValidationMessageFor(model => model.Urgency, "", new { @class = "text-danger" })
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        @Html.LabelFor(model => model.Location, htmlAttributes: new { @class = "control-label" })
+                                        <div class="col-md-10">
+                                            @Html.DropDownList("LocationID", ViewBag.LocationList as SelectList, "Please Select", new { @class = "select2 form-control" })
+                                            @Html.ValidationMessageFor(model => model.Location, "", new { @class = "text-danger" })
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        @Html.LabelFor(model => model.Explanation, htmlAttributes: new { @class = "control-label" })
+                                        <div class="col-md-10">
+                                            @Html.EditorFor(model => model.Explanation, new { htmlAttributes = new { @class = "form-control" } })
+                                            @Html.ValidationMessageFor(model => model.Explanation, "", new { @class = "text-danger" })
+                                        </div>
+                                    </div>
+                                    <div id="loading" class="spinner-border text-info" role="status" style="display:none">
+                                        <span class="sr-only">Saving...</span>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                        <button type="submit" name="edit" value="edit" class="btn btn-primary">Save changes</button>
+                                    </div>
+
+                                </div>
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+
+            <br />
+
+            <div class="form-group">
+                <div class="col-md-offset-2">
+                    @using (Html.BeginForm())
+                    {
+                        <button type="submit" name="Passive" value="Passive" class="btn btn-outline-secondary btn-block">Delete</button>
+                    }
+                </div>
+            </div>
+        }
+
+    </div>
+</div>
+
+

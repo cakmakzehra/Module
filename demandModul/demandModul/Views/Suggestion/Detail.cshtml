@@ -1,0 +1,272 @@
+﻿@model demandModul.ViewModels.SuggestionViewModel.SuggestionLike
+
+@{
+    ViewBag.Title = "Detail";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<div class="row">
+    <div class="col-md-12">
+        <br />
+        <h2>Suggestion Detail</h2>
+        <br />
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-6">
+
+    </div>
+    <div class="col-md-2">
+        @if ((Convert.ToInt32(Session["EmployeeID"]) == Model?.Suggestion.Employee.EmployeeID) && (Model?.Suggestion.ApprovedStatus == "New Suggestion"))
+        {
+            <button type="button" class="btn btn-info btn-block" data-toggle="modal" data-target="#EditModal">
+                Edit
+            </button>
+            <div class="modal fade" id="EditModal" tabindex="-1" role="dialog" aria-labelledby="EditModal" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="EditModalLabel">Edit Suggestion</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            @using (Html.BeginForm())
+                            {
+                                @Html.AntiForgeryToken()
+
+                                <div class="form-horizontal">
+
+
+                                    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+                                    <div class="form-group">
+                                        @Html.LabelFor(model => model.Suggestion.Name, htmlAttributes: new { @class = "control-label " })
+                                        <div class="col-md-10">
+                                            @Html.EditorFor(model => model.Suggestion.Name, new { htmlAttributes = new { @class = "form-control" } })
+                                            @Html.ValidationMessageFor(model => model.Suggestion.Name, "", new { @class = "text-danger" })
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        @Html.LabelFor(model => model.Suggestion.Explanation, htmlAttributes: new { @class = "control-label" })
+                                        <div class="col-md-10">
+                                            @Html.EditorFor(model => model.Suggestion.Explanation, new { htmlAttributes = new { @class = "form-control" } })
+                                            @Html.ValidationMessageFor(model => model.Suggestion.Explanation, "", new { @class = "text-danger" })
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="submit" name="delete" value="delete" class="btn btn-secondary">Delete</button>
+                                    <button type="submit" name="save" value="save" class="btn btn-primary">Save changes</button>
+                                </div>
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+    <div class="col-md-2">
+        @if ((Session["Title"]?.ToString() == "Manager") && (Model?.Suggestion.ApprovedStatus == "New Suggestion"))
+        {
+            <button type="button" class="btn btn-info btn-block" data-toggle="modal" data-target="#AppModal">
+                Approve
+            </button>
+            <div class="modal fade" id="AppModal" tabindex="-1" role="dialog" aria-labelledby="EditModal" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="AppModalLabel">Approve Suggestion</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            @using (Html.BeginForm())
+                            {
+                                @Html.AntiForgeryToken()
+
+                                <div class="form-horizontal">
+
+                                    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+                                    <div class="form-group">
+                                        @Html.LabelFor(model => model.Suggestion.SuggestionTypeID, htmlAttributes: new { @class = "control-label" })
+                                        <div class="col-md-10">
+                                            @Html.DropDownList("SuggestionTypeID", ViewBag.SuggestionTypeList as SelectList,"Select..",new { @class = "form-control" })
+                                        </div>
+                                    </div>
+
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="submit" name="Approve" value="Approve" class="btn btn-info">Approve</button>
+                                </div>
+                            }
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        }
+    </div>
+
+    <div class="col-md-2">
+        @if ((Session["Title"]?.ToString() == "Manager") && (Model?.Suggestion.ApprovedStatus == "New Suggestion"))
+        {
+            <button type="button" class="btn btn-danger btn-block" data-toggle="modal" data-target="#denModal">
+                Denied
+            </button>
+            <div class="modal fade" id="denModal" tabindex="-1" role="dialog" aria-labelledby="EditModal" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="denModalLabel">Denied Suggestion</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            @using (Html.BeginForm())
+                            {
+                                @Html.AntiForgeryToken()
+
+                                <div class="form-horizontal">
+                                    <div class="form-group">
+                                        @Html.LabelFor(model => model.Suggestion.DeniedNote, "Why ? ", htmlAttributes: new { @class = "control-label" })
+                                        <div class="col-md-10">
+                                            @Html.EditorFor(model => model.Suggestion.DeniedNote, new { htmlAttributes = new { @class = "form-control" }, @required = "required" })
+                                            @Html.ValidationMessageFor(model => model.Suggestion.DeniedNote, "", new { @class = "text-danger" })
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="submit" name="Denied" value="Denied" class="btn btn-danger">Denied</button>
+                                </div>
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        }
+    </div>
+
+</div>
+<div class="row">
+    <div class="col-md-12">
+        <br />
+        <div class="card">
+            <div class="card-header">
+                @Html.DisplayFor(model => model.Suggestion.Name)
+
+            </div>
+            <div class="card-body">
+                <h5 class="card-title"> @Html.DisplayFor(model => model.Suggestion.SuggestionType.Name)</h5>
+                <p class="card-text"> @Html.DisplayFor(model => model.Suggestion.Explanation)</p>
+                <p class="card-text" style="text-align:right"><i><font size="2"> @Html.DisplayFor(model => model.Suggestion.Employee.NameSurname) wrote this on @Html.DisplayFor(model => model.Suggestion.CreateDate) .</font></i></p>
+
+            </div>
+        </div>
+        <br />
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-1">
+        @if (Model.Suggestion.ApprovedStatus == "Approved")
+        {
+            var bulundu = false;
+            foreach (var item in Model.Like)
+            {
+                if (item.Liked == true)
+                {
+                    if (item.EmployeeID == Convert.ToInt32(Session["EmployeeID"]))
+                    {
+                        bulundu = true;
+                        <i id="unlikes" class="fas fa-heart"></i>
+                    }
+                }
+            }
+            if (bulundu == false)
+            {
+                <i id="likes" class="far fa-heart"></i>
+            }
+        }
+    </div>
+    <div id="likelist" class="col-md-11">
+
+        @if (Model.Suggestion.LikesCount != 0)
+        {
+            if (Model.Suggestion.LikesCount != 1)
+            {
+                <p>@Model.Like[0].Employee.NameSurname and @(Model.Like.Count - 1) employee liked this suggestion.</p>
+            }
+            else
+            {
+                <p>@Model.Like[0].Employee.NameSurname liked this suggestion.</p>
+            }
+        }
+
+    </div>
+</div>
+
+
+<div id="dialog" class="w-100 p-3">
+    @foreach (var comment in Model?.Suggestion.Comments)
+    {
+        <p class="rounded" style="border:1.3px; border-style:solid; border-color:#449595; padding: 1em;"><b>@comment.Employee.NameSurname</b> : @comment.CommentText</p>
+    }
+</div>
+<div id="loading" class="spinner-border text-info" role="status" style="display:none">
+    <span class="sr-only">Loading...</span>
+</div>
+
+<br />
+<br />
+<br />
+@if (Model.Suggestion.ApprovedStatus == "Approved")
+{
+    <div class="row">
+        <div class="col-md-8"></div>
+        <div class="col-md-4">
+
+            <div class="input-group mb-3">
+                <input type="text" id="txtCom" class="form-control" placeholder="Add a comment.." aria-label="Add a comment.." aria-describedby="addon2">
+                <div class="input-group-append">
+                    <span class="input-group-text" id="addon2">Send</span>
+                </div>
+            </div>
+        </div>
+
+    </div>
+}
+<script>
+    $(function () {
+        $('#addon2').click(function () {
+            $('#loading').show(300, function () {
+                var data = $('#txtCom').val();
+                var id=@Model.Suggestion.SuggestionID;
+                $.get("/Suggestion/LoadData", { data: data ,id:id}, function (d) {
+                    $('#dialog').html(d);
+                    $('#loading').hide(300);
+                    $('#txtCom').val(null);
+                });
+            });
+        });
+        $('#likes').click(function () {
+            var id =@Model.Suggestion.SuggestionID;
+            $.get("/Suggestion/Likes", { id: id }, function (d) {
+                //$('#likelist').html(d);
+                window.location.reload();
+            });
+        });
+        $('#unlikes').click(function () {
+            var id =@Model.Suggestion.SuggestionID;
+            $.get("/Suggestion/Unlikes", { id: id }, function () {
+                //$('#likelist').html(d);
+                window.location.reload();
+            });
+        });
+    });
+</script>

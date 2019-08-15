@@ -1,0 +1,305 @@
+﻿@model demandModul.Models.Fault
+
+@{
+    ViewBag.Title = "Detail";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="row">
+    <div class="col-md-12">
+        <br />
+        <h2>Fault Detail</h2>
+        <br />
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-header">
+                <b>FaultID:</b> @Html.DisplayFor(model => model.FaultID)
+            </div>
+            <ul class="list-group list-group-flush">
+                <li class="list-group-item"><b>Fault Type:</b> @Html.DisplayFor(model => model.FaultType.Name)</li>
+                <li class="list-group-item"><b>Explanation:</b> @Html.DisplayFor(model => model.Explanation)</li>
+                <li class="list-group-item"><b>Location:</b> @Html.DisplayFor(model => model.Location.Name)</li>
+                <li class="list-group-item"><b>Fault Status:</b> @Html.DisplayFor(model => model.FaultStatus)</li>
+                <li class="list-group-item"><b>Employee:</b> @Html.DisplayFor(model => model.Employee.NameSurname)</li>
+                <li class="list-group-item"><b>Create Date:</b> @Html.DisplayFor(model => model.CreateDate)</li>
+                <li class="list-group-item"><b>Intended Maintenance Time:</b> @Html.DisplayFor(model => model.IntendedMaintenanceTime)</li>
+                <li class="list-group-item"><b>Related Department:</b> @Html.DisplayFor(model => model.RelatedDepartment)</li>
+                @if (Model?.FaultStatus != "New Fault")
+                {
+                    <li class="list-group-item"><b>Maintenance Employee:</b> @Html.DisplayFor(model => model.MaintenanceEmployee)</li>
+                    <li class="list-group-item"><b>Maintenance Explanation:</b> @Html.DisplayFor(model => model.MaintenanceExplanation)</li>
+                    <li class="list-group-item"><b>Applied Maintenance Date:</b> @Html.DisplayFor(model => model.AppliedMaintenanceDate)</li>
+                }
+
+            </ul>
+        </div>
+        <br />
+    </div>
+    <div class="col-md-4">
+
+        @if ((Session["Title"]?.ToString() == "Manager") && (Model?.FaultStatus != "Successfully completed") && (Session["Department"]?.ToString() == Model.RelatedDepartment))
+        {
+            using (Html.BeginForm())
+            {
+
+                <!--I am Working Başlangıç-->
+                <button type="button" class="btn btn-outline-primary btn-block" data-toggle="modal" data-target="#IamWorking">
+                    I am Working
+                </button>
+                <div class="modal fade" id="IamWorking" tabindex="-1" role="dialog" aria-labelledby="IamWorking" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="ModalLabel">I am working</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <form>
+                                    <div class="form-group">
+                                        <label for="saysom">If you want to say something :</label>
+                                        @Html.EditorFor(model => model.MaintenanceExplanation, new { htmlAttributes = new { @class = "form-control", @id = "saysom" } })
+                                    </div>
+                                </form>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                <button type="submit" name="IamWorking" value="IamWorking" class="btn btn-primary">Save changes</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+            <!--I am Working Bitiş-->
+            <br />
+            <!--Denied Başlangıç-->
+            using (Html.BeginForm())
+            {
+                <button type="button" class="btn btn-outline-danger btn-block" data-toggle="modal" data-target="#Denied">
+                    Denied
+                </button>
+                <div class="modal fade" id="Denied" tabindex="-1" role="dialog" aria-labelledby="Denied" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="ModalLabel">Denied</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+
+                            <div class="modal-body">
+
+                                <form>
+                                    <div class="form-group">
+                                        <label for="DeniedReason">Specify the reason for the rejection:</label>
+                                        @Html.EditorFor(model => model.MaintenanceExplanation, new { htmlAttributes = new { @class = "form-control", @id = "DeniedReason", @required = "required" } })
+                                    </div>
+                                </form>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                <button type="submit" name="Denied" value="Denied" class="btn btn-primary">Save changes</button>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            }
+            <!--Denied bitiş-->
+            <br />
+            <!--DifferentCompany Başlangıç-->
+            using (Html.BeginForm())
+            {
+                <button type="button" class="btn btn-outline-info btn-block" data-toggle="modal" data-target="#DifferentCompanyWorking">
+                    Different company working
+                </button>
+                <div class="modal fade" id="DifferentCompanyWorking" tabindex="-1" role="dialog" aria-labelledby="DifferentCompanyWorking" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="ModalLabel">Different company working</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+
+                            <div class="modal-body">
+                                <form>
+                                    <div class="form-group">
+                                        <label for="CompName">Enter which company you agree:</label>
+                                        @Html.EditorFor(model => model.MaintenanceExplanation, new { htmlAttributes = new { @class = "form-control", @id = "CompName", @required = "required" } })
+                                    </div>
+                                </form>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                <button type="submit" name="DifferentCompanyWorking" value="DifferentCompanyWorking" class="btn btn-primary">Save changes</button>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            }
+            <!--DifferentCompany Bitiş-->
+            <br />
+            <!--SuccessfullyCompleted başlangıç-->
+            using (Html.BeginForm())
+            {
+                <button type="button" class="btn btn-outline-success btn-block" data-toggle="modal" data-target="#SuccessfullyCompleted">
+                    Successfully completed
+                </button>
+                <div class="modal fade" id="SuccessfullyCompleted" tabindex="-1" role="dialog" aria-labelledby="SuccessfullyCompleted" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="ModalLabel">Successfully completed</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+
+                            <div class="modal-body">
+                                <form>
+                                    <div class="form-group">
+                                        <label for="SaySome">If you want to say something:</label>
+                                        @Html.EditorFor(model => model.MaintenanceExplanation, new { htmlAttributes = new { @class = "form-control", @id = "SaySome" } })
+                                    </div>
+                                </form>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                <button type="submit" name="SuccessfullyCompleted" value="SuccessfullyCompleted" class="btn btn-primary">Save changes</button>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            }
+            <!--SuccessfullyCompleted bitiş-->
+            <br />
+            <!--SituationCouldnotBeResolved başlangıç-->
+            using (Html.BeginForm())
+            {
+                <button type="button" class="btn btn-outline-warning btn-block" data-toggle="modal" data-target="#SituationCouldnotBeResolved">
+                    Situation could not be resolved
+                </button>
+                <div class="modal fade" id="SituationCouldnotBeResolved" tabindex="-1" role="dialog" aria-labelledby="SituationCouldnotBeResolved" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="ModalLabel">Situation could not be resolved</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+
+                            <div class="modal-body">
+                                <form>
+                                    <div class="form-group">
+                                        <label for="SitWhy"> Why ? </label>
+                                        @Html.EditorFor(model => model.MaintenanceExplanation, new { htmlAttributes = new { @class = "form-control", @id = "SitWhy", @required = "required" } })
+                                    </div>
+                                </form>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                <button type="submit" name="SituationCouldnotBeResolved" value="SituationCouldnotBeResolved" class="btn btn-primary">Save changes</button>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            }
+            <!--SituationCouldnotBeResolved bitiş-->
+            <br />
+        }
+        @if ((Convert.ToInt32(Session["EmployeeID"]) == Model?.Employee.EmployeeID) && (Model?.FaultStatus == "New Fault"))
+        {
+            <button type="button" class="btn btn-outline-info btn-block" data-toggle="modal" data-target="#EditModal">
+                Edit
+            </button>
+            <div class="modal fade" id="EditModal" tabindex="-1" role="dialog" aria-labelledby="EditModal" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="EditModalLabel">Edit Suggestion</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+
+                        <div class="modal-body">
+                            @using (Html.BeginForm())
+                            {
+                                @Html.AntiForgeryToken()
+
+                            <div class="form-horizontal">
+
+
+                                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+                                <div class="form-group">
+                                    @Html.LabelFor(model => model.Explanation, htmlAttributes: new { @class = "control-label" })
+                                    <div class="col-md-10">
+                                        @Html.EditorFor(model => model.Explanation, new { htmlAttributes = new { @class = "form-control", @required = "required" } })
+                                        @Html.ValidationMessageFor(model => model.Explanation, "", new { @class = "text-danger" })
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    @Html.LabelFor(model => model.FaultType, htmlAttributes: new { @class = "control-label " })
+                                    <div class="col-md-10">
+                                        @Html.DropDownList("FaultTypeID", ViewBag.FaultTypeList as SelectList, "Please Select", new { @class = "select2 form-control" })
+                                        @Html.ValidationMessageFor(model => model.FaultType, "", new { @class = "text-danger" })
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    @Html.LabelFor(model => model.Location, htmlAttributes: new { @class = "control-label", @required = "required" })
+                                    <div class="col-md-10">
+                                        @Html.DropDownList("LocationID", ViewBag.LocationList as SelectList, "Please Select", new { @class = "select2 form-control" })
+                                        @Html.ValidationMessageFor(model => model.Location, "", new { @class = "text-danger" })
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    @Html.LabelFor(model => model.IntendedMaintenanceTime, htmlAttributes: new { @class = "control-label" })
+                                    <div class="col-md-10">
+                                        @Html.DropDownList("IntendedMaintenanceTime", new List<SelectListItem>
+                                        {
+                                            new SelectListItem{Text="Now" ,Value="Now"},
+                                            new SelectListItem{Text="Today" ,Value="Today"},
+                                            new SelectListItem{Text="Tomorrow" ,Value="Tomorrow"},
+                                            new SelectListItem{Text="Weekend" ,Value="Weekend"},
+                                            new SelectListItem{Text="Out of Hours" ,Value="Out of Hours"},
+
+                                        }, new { @class = "select2 form-control" })
+                                        @Html.ValidationMessageFor(model => model.IntendedMaintenanceTime, "", new { @class = "text-danger" })
+                                    </div>
+                                </div>
+                            </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                    <button type="submit" name="edit" value="edit" class="btn btn-primary">Save changes</button>
+                                </div>
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <br />
+            using (Html.BeginForm())
+            {
+                <div class="form-group">
+                    <div class="col-md-offset-2">
+                        <button type="submit" name="Passive" value="Passive" class="btn btn-outline-secondary btn-block">Delete</button>
+                    </div>
+                </div>
+            }
+        }
+    </div>
+</div>
+
+

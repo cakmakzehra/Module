@@ -1,0 +1,63 @@
+﻿@model IEnumerable<demandModul.Models.Employee>
+
+@{
+    ViewBag.Title = "List";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Employee List</h2>
+<br />
+<div class="row">
+    <div class="col-md-10"></div>
+    <div class="col-md-2">
+        @Html.ActionLink("Create New", "Create", null, new { @class = "btn btn-info btn-block" })
+    </div>
+</div>
+    
+<br />
+
+<table class="table table-striped">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.MailAddress)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.NameSurname)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Department)
+        </th>
+        
+        <th>
+            @Html.DisplayNameFor(model => model.Title)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Password)
+        </th>
+    </tr>
+
+@foreach (var item in Model) {
+<tr>
+    @using (Html.BeginForm())
+    {
+        <td>
+            @Html.DisplayFor(modelItem => item.MailAddress)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.NameSurname)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Department)
+        </td>
+       
+        <td>
+            @Html.DisplayFor(modelItem => item.Title)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Password)
+        </td>
+    }
+</tr>
+}
+
+</table>

@@ -1,0 +1,320 @@
+﻿@model demandModul.Models.Employee
+
+@{
+    ViewBag.Title = "Profile";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<ul class="nav nav-tabs" id="myTab" role="tablist">
+    <li class="nav-item">
+        <a class="nav-link active" id="home-tab" data-toggle="tab" href="#profile" role="tab" aria-controls="home" aria-selected="true"> Profile</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" id="profile-tab" data-toggle="tab" href="#demands" role="tab" aria-controls="profile" aria-selected="false"> My Demands</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" id="contact-tab" data-toggle="tab" href="#suggestions" role="tab" aria-controls="contact" aria-selected="false">My Suggestions</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" id="contact-tab" data-toggle="tab" href="#faults" role="tab" aria-controls="contact" aria-selected="false">My Faults</a>
+    </li>
+</ul>
+<div class="tab-content" id="myTabContent">
+    <div class="tab-pane fade show active" id="profile" role="tabpanel" aria-labelledby="home-tab">
+        <br />
+        <br />
+        <h2>My Profile</h2>
+
+        @using (Html.BeginForm())
+        {
+            @Html.AntiForgeryToken()
+
+            <div class="form-horizontal">
+                <hr />
+                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                @Html.HiddenFor(model => model.EmployeeID)
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.MailAddress, htmlAttributes: new { @class = "control-label " })
+                    <div class="col-md-10">
+                        @Html.EditorFor(model => model.MailAddress, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.MailAddress, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.NameSurname, htmlAttributes: new { @class = "control-label" })
+                    <div class="col-md-10">
+                        @Html.EditorFor(model => model.NameSurname, new { htmlAttributes = new { @class = "form-control", @disabled = "disabled" } })
+                        @Html.ValidationMessageFor(model => model.NameSurname, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.Department, htmlAttributes: new { @class = "control-label" })
+                    <div class="col-md-10">
+                        @Html.EditorFor(model => model.Department, new { htmlAttributes = new { @class = "form-control", @disabled = "disabled" } })
+                        @Html.ValidationMessageFor(model => model.Department, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.Title, htmlAttributes: new { @class = "control-label" })
+                    <div class="col-md-10">
+                        @Html.EditorFor(model => model.Title, new { htmlAttributes = new { @class = "form-control", @disabled = "disabled" } })
+                        @Html.ValidationMessageFor(model => model.Title, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.Password, htmlAttributes: new { @class = "control-label " })
+                    <div class="col-md-10">
+                        @Html.EditorFor(model => model.Password, new { htmlAttributes = new { @class = "form-control", @type = "password" } })
+                        @Html.ValidationMessageFor(model => model.Password, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="col-md-offset-2 col-md-10">
+                        <input type="submit" value="Save" class="btn btn-outline-danger" />
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+    <div class="tab-pane fade " id="demands" role="tabpanel" aria-labelledby="profile-tab">
+        <br />
+        <br />
+        <table class="table table-striped">
+            <tr>
+                <th>
+                    Inventory Name
+                </th>
+                <th>
+                    Quantity
+                </th>
+                <th>
+                    Unit Type
+                </th>
+                <th>
+                    Create Date
+                </th>
+                <th>
+                    Urgency
+                </th>
+                <th>
+                    Approved Status
+                </th>
+                <th>
+                    Approver Employee
+                </th>
+                <th>
+                    Approved Date
+                </th>
+                <th>
+                    Approved Note
+                </th>
+                <th>
+                    Location
+                </th>
+                <th>
+                    Explanation
+                </th>
+                <th></th>
+            </tr>
+            @if (Model?.Demands != null)
+            {
+                foreach (var item in Model.Demands)
+                {
+                    if (item.ApprovedStatus != "Passive")
+                    {
+                        <tr>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.InventoryName)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Quantity)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.UnitType)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.CreateDate)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Urgency)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.ApprovedStatus)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.ApproverEmployee)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.AppDate)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.AppNote)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Location)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Explanation)
+                            </td>
+                            <td>@Html.ActionLink("Detail", "Detail", new { DemandID = @item.DemandID }, new { @class = "btn btn-info" })</td>
+
+                        </tr>
+                    }
+                }
+            }
+        </table>
+        @if (Model?.Demands == null)
+        {
+            <p>You have not a demand.</p>
+        }
+
+    </div>
+    <div class="tab-pane fade" id="suggestions" role="tabpanel" aria-labelledby="contact-tab">
+        <br />
+        <br />
+        <table class="table table-striped">
+            <tr>
+                <th>
+                    Name
+                </th>
+                <th>
+                    Suggestion Type
+                </th>
+                <th>
+                    Explanation
+                </th>
+                <th>
+                    Create Date
+                </th>
+                <th>
+                    Last Update Date
+                </th>
+                <th>
+                    Approved Status
+                </th>
+                <th>
+                    Approve Date
+                </th>
+                <th>
+                    Approve Note
+                </th>
+                <th></th>
+            </tr>
+            @if (Model?.Suggestions != null)
+            {
+
+                foreach (var item in Model.Suggestions)
+                {
+                    if (item.ApprovedStatus != "Passive")
+                    {
+                        <tr>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Name)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.SuggestionType)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Explanation)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.CreateDate)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.lastUpdateDate)
+                            </td>
+                            <td>
+                                @item.ApprovedStatus
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.ApprovedDate)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.DeniedNote)
+                            </td>
+                            <td>@Html.ActionLink("Detail", "Detail", new { SuggestionID = @item.SuggestionID }, new { @class = "btn btn-info" })</td>
+                        </tr>
+                    }
+                }
+            }
+        </table>
+        @if (Model?.Suggestions == null)
+        {
+            <p>You have not a suggestion.</p>
+        }
+    </div>
+    <div class="tab-pane fade" id="faults" role="tabpanel" aria-labelledby="contact-tab">
+        <br />
+        <br />
+        <table class="table table-striped">
+            <tr>
+                <th>
+                    Explanation
+                </th>
+                <th>
+                    Fault Type
+                </th>
+                <th>
+                    Location
+                </th>
+                <th>
+                    Intended Maintenance Time
+                </th>
+
+                <th>
+                    Create Date
+                </th>
+                <th>
+                    Fault Status
+                </th>
+                <th></th>
+            </tr>
+            @if (Model?.Faults != null)
+            {
+
+                foreach (var item in Model.Faults)
+                {
+                    if (item.FaultStatus != "Passive")
+                    {
+                        <tr>
+
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Explanation)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.FaultType)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Location)
+                            </td>
+
+                            <td>
+                                @Html.DisplayFor(modelItem => item.IntendedMaintenanceTime)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.CreateDate)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.FaultStatus)
+                            </td>
+                            <td>@Html.ActionLink("Detail", "Detail", new { FaultID = @item.FaultID }, new { @class = "btn btn-info" })</td>
+                        </tr>
+                    }
+                }
+            }
+        </table>
+        @if (Model?.Faults == null)
+        {
+            <p>You have not a fault.</p>
+        }
+
+    </div>
+</div>
