@@ -57,7 +57,8 @@ namespace demandModul.Controllers
         {
             DatabaseContext db = new DatabaseContext();
             UnitType UnitType = new UnitType();
-            Employee employee = db.Employees.Where(x => x.EmployeeID == Convert.ToInt32(Session["EmployeeID"])).FirstOrDefault();
+            int Eid = Convert.ToInt32(Session["EmployeeID"]);
+            Employee employee = db.Employees.Where(x => x.EmployeeID == Eid).FirstOrDefault();
             if (string.IsNullOrEmpty(name) == false && string.IsNullOrEmpty(explanation) == false)
             {
                 if (employee != null)

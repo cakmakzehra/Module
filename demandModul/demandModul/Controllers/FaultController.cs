@@ -53,7 +53,8 @@ namespace demandModul.Controllers
         {
             DatabaseContext db = new DatabaseContext();
             Fault Fault = db.Faults.Where(x => x.FaultID == FaultID).FirstOrDefault();
-            Employee employee = db.Employees.Where(x => x.EmployeeID == Convert.ToInt32(Session["EmployeeID"])).FirstOrDefault();
+            int Eid = Convert.ToInt32(Session["EmployeeID"]);
+            Employee employee = db.Employees.Where(x => x.EmployeeID == Eid).FirstOrDefault();
 
             if ((Fault != null) && (employee != null))
             {
@@ -130,7 +131,8 @@ namespace demandModul.Controllers
         {
             DatabaseContext db = new DatabaseContext();
             Fault fault = new Fault();
-            Employee employee = db.Employees.Where(x => x.EmployeeID == Convert.ToInt32(Session["EmployeeID"])).FirstOrDefault();
+            int Eid = Convert.ToInt32(Session["EmployeeID"]);
+            Employee employee = db.Employees.Where(x => x.EmployeeID == Eid).FirstOrDefault();
             Location Location = db.Locations.Where(x => x.LocationID == location).FirstOrDefault();
             FaultType Faulttype = db.FaultTypes.Where(x => x.FaultTypeID == faultType).FirstOrDefault();
 

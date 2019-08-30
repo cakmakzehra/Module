@@ -138,7 +138,7 @@
                                 @Html.DisplayFor(modelItem => item.Quantity)
                             </td>
                             <td>
-                                @Html.DisplayFor(modelItem => item.UnitType)
+                                @Html.DisplayFor(modelItem => item.UnitType.Name)
                             </td>
                             <td>
                                 @Html.DisplayFor(modelItem => item.CreateDate)
@@ -159,7 +159,7 @@
                                 @Html.DisplayFor(modelItem => item.AppNote)
                             </td>
                             <td>
-                                @Html.DisplayFor(modelItem => item.Location)
+                                @Html.DisplayFor(modelItem => item.Location.Name)
                             </td>
                             <td>
                                 @Html.DisplayFor(modelItem => item.Explanation)
@@ -220,7 +220,7 @@
                                 @Html.DisplayFor(modelItem => item.Name)
                             </td>
                             <td>
-                                @Html.DisplayFor(modelItem => item.SuggestionType)
+                                @Html.DisplayFor(modelItem => item.SuggestionType.Name)
                             </td>
                             <td>
                                 @Html.DisplayFor(modelItem => item.Explanation)
@@ -290,10 +290,10 @@
                                 @Html.DisplayFor(modelItem => item.Explanation)
                             </td>
                             <td>
-                                @Html.DisplayFor(modelItem => item.FaultType)
+                                @Html.DisplayFor(modelItem => item.FaultType.Name)
                             </td>
                             <td>
-                                @Html.DisplayFor(modelItem => item.Location)
+                                @Html.DisplayFor(modelItem => item.Location.Name)
                             </td>
 
                             <td>

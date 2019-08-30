@@ -49,7 +49,8 @@ namespace demandModul.Controllers
         {
             DatabaseContext db = new DatabaseContext();
             Suggestion Suggestion = db.Suggestions.Where(x => x.SuggestionID == SuggestionID).FirstOrDefault();
-            Employee employee = db.Employees.Where(x => x.EmployeeID == Convert.ToInt32(Session["EmployeeID"])).FirstOrDefault();
+            int Eid = Convert.ToInt32(Session["EmployeeID"]);
+            Employee employee = db.Employees.Where(x => x.EmployeeID == Eid).FirstOrDefault();
             if (employee != null && Suggestion != null)
             {
                 string controlClicked = string.Empty;
@@ -73,7 +74,7 @@ namespace demandModul.Controllers
                     Suggestion.ApprovedStatus = "Denied";
                     Suggestion.ApprovedDate = DateTime.Now;
                     Suggestion.AppEmployee = employee.NameSurname;
-                    Suggestion.DeniedNote = model.DeniedNoteNote;
+                    Suggestion.DeniedNote = model.DeniedNote;
                     db.SaveChanges();
                     return RedirectToAction("Suggestions", "Suggestion");
                 }
@@ -99,7 +100,8 @@ namespace demandModul.Controllers
         {
             DatabaseContext db = new DatabaseContext();
             Comment comment = new Comment();
-            Employee employee = db.Employees.Where(x => x.EmployeeID == Convert.ToInt32(Session["EmployeeID"])).FirstOrDefault();
+            int Eid = Convert.ToInt32(Session["EmployeeID"]);
+            Employee employee = db.Employees.Where(x => x.EmployeeID == Eid).FirstOrDefault();
             Suggestion Suggestion = db.Suggestions.Where(x => x.SuggestionID == id).FirstOrDefault();
             if (string.IsNullOrEmpty(data) == false)
             {
@@ -125,7 +127,8 @@ namespace demandModul.Controllers
         {
             DatabaseContext db = new DatabaseContext();
             Suggestion suggestion = new Suggestion();
-            Employee employee = db.Employees.Where(x => x.EmployeeID == Convert.ToInt32(Session["EmployeeID"])).FirstOrDefault();
+            int Eid = Convert.ToInt32(Session["EmployeeID"]);
+            Employee employee = db.Employees.Where(x => x.EmployeeID == Eid ).FirstOrDefault();
             if (string.IsNullOrEmpty(name) == false && string.IsNullOrEmpty(explanation) == false)
             {
                 if (employee != null)
@@ -152,9 +155,10 @@ namespace demandModul.Controllers
             if (Session["EmployeeID"] != null)
             {
                 DatabaseContext db = new DatabaseContext();
-                Employee employee = db.Employees.Where(x => x.EmployeeID == Convert.ToInt32(Session["EmployeeID"])).FirstOrDefault();
+                int Eid = Convert.ToInt32(Session["EmployeeID"]);
+                Employee employee = db.Employees.Where(x => x.EmployeeID == Eid).FirstOrDefault();
                 Suggestion Suggestion = db.Suggestions.Where(x => x.SuggestionID == id).FirstOrDefault();
-                Like like = db.Likes.FirstOrDefault(x => x.SuggestionID == id && x.EmployeeID == Convert.ToInt32(Session["EmployeeID"]));
+                Like like = db.Likes.FirstOrDefault(x => x.SuggestionID == id && x.EmployeeID == Eid);
                 if (like != null)
                 {
                     return RedirectToAction("Detail", "Suggestion", new { Suggestion.SuggestionID });
@@ -183,7 +187,8 @@ namespace demandModul.Controllers
             if (Session["EmployeeID"] != null)
             {
                 DatabaseContext db = new DatabaseContext();
-                Like like = db.Likes.FirstOrDefault(x => x.SuggestionID == id && x.EmployeeID == Convert.ToInt32(Session["EmployeeID"]));
+                int Eid = Convert.ToInt32(Session["EmployeeID"]);
+                Like like = db.Likes.FirstOrDefault(x => x.SuggestionID == id && x.EmployeeID == Eid);
                 Suggestion Suggestion = db.Suggestions.Where(x => x.SuggestionID == id).FirstOrDefault();
                 Suggestion.LikesCount--;
                 db.Likes.Remove(like);

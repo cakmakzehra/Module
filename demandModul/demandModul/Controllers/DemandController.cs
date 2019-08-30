@@ -53,7 +53,8 @@ namespace demandModul.Controllers
         {
             DatabaseContext db = new DatabaseContext();
             Demand Demand = db.Demands.Where(x => x.DemandID == DemandID).FirstOrDefault();
-            Employee employee = db.Employees.Where(x => x.EmployeeID == Convert.ToInt32(Session["EmployeeID"])).FirstOrDefault();
+            int Eid = Convert.ToInt32(Session["EmployeeID"]);
+            Employee employee = db.Employees.Where(x => x.EmployeeID == Eid).FirstOrDefault();
 
             if (employee != null && Demand != null)
             {
@@ -111,7 +112,8 @@ namespace demandModul.Controllers
         {
             DatabaseContext db = new DatabaseContext();
             Demand demand = new Demand();
-            Employee employee = db.Employees.Where(x => x.EmployeeID == Convert.ToInt32(Session["EmployeeID"])).FirstOrDefault();
+            int Eid = Convert.ToInt32(Session["EmployeeID"]);
+            Employee employee = db.Employees.Where(x => x.EmployeeID == Eid).FirstOrDefault();
             Location location = db.Locations.Where(x => x.LocationID == address).FirstOrDefault();
             UnitType unittype = db.UnitTypes.Where(x => x.UnitTypeID == unitType).FirstOrDefault();
             if (string.IsNullOrEmpty(name) == false && string.IsNullOrEmpty(explanation) == false)

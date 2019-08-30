@@ -38,6 +38,16 @@
                             <label for="txtexplanation">Explanation</label>
                             <input type="text" class="form-control" id="txtexplanation" placeholder="Explanation">
                         </div>
+                        <div class="form-group">
+                            <label for="txtreleated">Releated Department</label>
+                            <select id="txtreleated" class="form-control">
+                                <option value="Web Department">Web Department</option>
+                                <option value="IK Department">IK Department</option>
+                                <option value="Support Department">Support Department</option>
+                                <option value="IT Department">IT Department</option>
+                                <option value="Project Department">Project Department</option>
+                            </select>
+                        </div>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -63,6 +73,9 @@
         <th>
             @Html.DisplayNameFor(model => model.CreateEmployee.NameSurname)
         </th>
+        <th>
+            @Html.DisplayNameFor(model => model.RelatedDepartment)
+        </th>
         <th></th>
         <th></th>
     </tr>
@@ -71,27 +84,30 @@
     {
         if (item.Status != "Passive")
         {
-            <tr>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Name)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Explanation)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.CreateDate)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.CreateEmployee.NameSurname)
-                </td>
-                <td>
-                    <a href="#" class="btn btn-info btn-block" onclick="EditRecord(@item.FaultTypeID)">Edit </a>
-                </td>
-                <td>
-                    @Ajax.ActionLink("Delete", "Delete", new { id = item.FaultTypeID }, new AjaxOptions() { HttpMethod = "GET", OnSuccess = "fnSuccess" }, new { @class = "btn btn-danger btn-block" })
+<tr>
+    <td>
+        @Html.DisplayFor(modelItem => item.Name)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.Explanation)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.CreateDate)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.CreateEmployee.NameSurname)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.RelatedDepartment)
+    </td>
+    <td>
+        <a href="#" class="btn btn-info btn-block" onclick="EditRecord(@item.FaultTypeID)">Edit </a>
+    </td>
+    <td>
+        @Ajax.ActionLink("Delete", "Delete", new { id = item.FaultTypeID }, new AjaxOptions() { HttpMethod = "GET", OnSuccess = "fnSuccess" }, new { @class = "btn btn-danger btn-block" })
 
-                </td>
-            </tr>
+    </td>
+</tr>
         }
     }
 
@@ -123,13 +139,14 @@
     }
     $(function () {
         $('#create').click(function () {
-            if (($('#txtexplanation').val() != 0) && ($('#txtname').val() != 0)) {
+            if (($('#txtexplanation').val() != 0) && ($('#txtname').val() != 0) && ($('#txtreleated').val() != 0)) {
                 var explanation = $('#txtexplanation').val();
                 var name = $('#txtname').val();
+                var releated = $('#txtreleated').val();
                 $.ajax({
                     method: "POST",
                     url: "/FaultType/CreateNew",
-                    data: { name: name, explanation: explanation },
+                    data: { name: name, explanation: explanation,releated:releated },
                     beforeSend: function () {
                         $('#loading').show(300);
                     }
@@ -139,10 +156,12 @@
                     $('#loading').hide(300);
                     $('#CreateNew').modal('hide')
                 });
+                $('#txtreleated').val(null);
                 $('#txtexplanation').val(null);
                 $('#txtname').val(null);
             }
             else {
+                $('#txtreleated').css("border", "1px solid red");
                 $('#txtexplanation').css("border", "1px solid red");
                 $('#txtname').css("border", "1px solid red");
             }

@@ -7,6 +7,21 @@
             <br />
             @Html.TextBoxFor(x => x.Explanation, new { @class = "form-control", @placeholder = "Explanation" })
             <br />
+            <div class="form-group">
+                @Html.LabelFor(model => model.RelatedDepartment, htmlAttributes: new { @class = "control-label " })
+                <div class="col-md-10">
+                    @Html.DropDownList("RelatedDepartment", new List<SelectListItem>
+                {
+                   new SelectListItem{Text="Web Department" ,Value="Web Department"},
+                   new SelectListItem{Text="IK Department" ,Value="IK Department"},
+                   new SelectListItem{Text="Support Department" ,Value="Support Department"},
+                   new SelectListItem{Text="IT Department" ,Value="IT Department"},
+                   new SelectListItem{Text="Project Department" ,Value="Project Department"},
+                }, new { @class = "select2 form-control" })
+                    @Html.ValidationMessageFor(model => model.RelatedDepartment, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
             <a href="" id="btnSubmit" class="btn btn-success">Save</a>
 
         </form>

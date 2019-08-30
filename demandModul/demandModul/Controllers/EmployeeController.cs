@@ -22,7 +22,7 @@ namespace demandModul.Controllers
             var person = db.Employees.Where(x => x.MailAddress == employee.MailAddress && x.Password == employee.Password).FirstOrDefault();
             if (person != null)
             {
-                Session["EmployeeID"] = person.EmployeeID.ToString();
+                Session["EmployeeID"] =person.EmployeeID.ToString();
                 Session["Name"] = person.NameSurname.ToString();
                 Session["Department"] = person.Department.ToString();
                 Session["Title"] = person.Title.ToString();
@@ -58,7 +58,8 @@ namespace demandModul.Controllers
             if (Session["EmployeeID"] != null)
             {
                 DatabaseContext db = new DatabaseContext();
-                return View(db.Employees.Where(x => x.EmployeeID == Convert.ToInt32(Session["EmployeeID"])).FirstOrDefault());
+                int Eid = Convert.ToInt32(Session["EmployeeID"]);
+                return View(db.Employees.Where(x => x.EmployeeID == Eid).FirstOrDefault());
             }
             else
             { return RedirectToAction("Login", "Employee"); }

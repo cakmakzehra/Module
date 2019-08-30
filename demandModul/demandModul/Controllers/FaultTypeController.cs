@@ -23,16 +23,18 @@ namespace demandModul.Controllers
             { return RedirectToAction("Login", "Employee"); }
         }
 
-        public ActionResult CreateNew(string name, string explanation)
+        public ActionResult CreateNew(string name, string explanation,string releated)
         {
             DatabaseContext db = new DatabaseContext();
             FaultType FaultType = new FaultType();
-            Employee employee = db.Employees.Where(x => x.EmployeeID == Convert.ToInt32(Session["EmployeeID"])).FirstOrDefault();
+            int Eid = Convert.ToInt32(Session["EmployeeID"]);
+            Employee employee = db.Employees.Where(x => x.EmployeeID == Eid).FirstOrDefault();
             if (employee != null)
             {
                 FaultType.Explanation = explanation;
                 FaultType.CreateDate = DateTime.Now;
                 FaultType.CreateEmployee = employee;
+                FaultType.RelatedDepartment = releated;
                 FaultType.Status = "Active";
                 FaultType.Name = name;
                 db.FaultTypes.Add(FaultType);
@@ -53,6 +55,7 @@ namespace demandModul.Controllers
                 DatabaseContext db = new DatabaseContext();
                 FaultType FaultType = db.FaultTypes.Where(x => x.FaultTypeID == model.FaultTypeID).FirstOrDefault();
                 FaultType.Explanation = model.Explanation;
+                FaultType.RelatedDepartment = model.RelatedDepartment;
                 FaultType.Name = model.Name;
                 db.SaveChanges();
                 return RedirectToAction("FaultTypes", "FaultType");
